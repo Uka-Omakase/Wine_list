@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uka Omakase</title>
+
+    <!-- Google Fonts 花体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./index_style.css">
+
+    <link href="./img/UKA 7_20_25-35.jpg 7_20_25-35.jpg" rel="icon" type="image/png" />
+  </head>
+  <body>
+
+    <!-- 开场过场动画层 -->
+    <div class="splash">
+      <h1 class="splash-title">Welcome to Uka Omakase</h1>
+    </div>
+
+    <!-- 顶部标题（固定，放在 .page 外） -->
+    <header class="main-header">
+      <div class="title-container">
+        <h1>Uka Omakase</h1>
+      </div>
+    </header>
+
+    <!-- 固定导航（也放在 .page 外，紧贴标题下方） -->
+    <nav class="sub-nav">
+      <a href="#dry-sake">Dry Sake</a>
+      <a href="#sweet-sake">Sweet Sake</a>
+      <a href="#cocktail">Cocktail</a>
+      <a href="#beer">Beer</a>
+      <a href="#red-wine">Red Wine</a>
+      <a href="#white-rose">White & Rose Wine</a>
+      <a href="#sparkling">Sparkling Wine</a>
+      <a href="#soft-drink">Soft Drink</a>
+    </nav>
+
+    <!-- 主网页内容（在固定头部和导航下面） -->
+    <main class="page">
+      <section class="gallery" id="dry-sake">
+        <h2 class="section-title">Dry Sake</h2>
+        <!-- 卡片 -->
+        <div class="dry_sake">
+          <figure class="win-figure">
+            <img src="./img/Dry_saki_1.png" alt="Suigei Tokubetsu Junmai" class="wine-image">
+            <figcaption class="dry_sake-info">
+              <h3 class="wine-name">Suigei Tokubetsu Junmai</h3>
+              <p class="wine-desc">Crisp and refreshing taste with subtle rice notes, balanced acidity, and a clean, fine finish. 
+                <br>
+                ABV: 13.8%, 300ml $25 | 720ml $48
+             </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="gallery" id="sweet-sake">
+        <h2 class="section-title">Sweet Sake</h2>
+      </section>
+
+      <section class="gallery" id="cocktail">
+        <h2 class="section-title">Cocktail</h2>
+      </section>
+
+      <section class="gallery" id="beer">
+        <h2 class="section-title">Beer</h2>
+      </section>
+
+      <section class="gallery" id="red-wine">
+        <h2 class="section-title">Red Wine</h2>
+      </section>
+
+      <section class="gallery" id="white-rose">
+        <h2 class="section-title">White & Rose Wine</h2>
+      </section>
+
+      <section class="gallery" id="sparkling">
+        <h2 class="section-title">Sparkling Wine</h2>
+      </section>
+
+      <section class="gallery" id="soft-drink">
+        <h2 class="section-title">Soft Drink</h2>
+      </section>
+    </main>
+
+    <!-- JS -->
+    <script src="./index_script.js" defer></script>
+  </body>
+</html>
