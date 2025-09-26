@@ -11,10 +11,11 @@
 
     <link href="./img/UKA 7_20_25-35.jpg 7_20_25-35.jpg" rel="icon" type="image/png" />
   </head>
-  <body>
+  <!-- 开场时添加 is-splashing，等动画结束后由 JS 移除 -->
+  <body class="is-splashing">
 
     <!-- 开场过场动画层 -->
-    <div class="splash">
+    <div class="splash" role="status" aria-live="polite" aria-label="Opening animation">
       <h1 class="splash-title">Welcome to Uka Omakase</h1>
     </div>
 
