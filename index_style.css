@@ -11,7 +11,7 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* ===== 开场动画 ===== */
+/* 开场背景层：4s 停留 + 1s 线性淡出 */
 .splash {
   position: fixed;
   inset: 0;
@@ -20,20 +20,29 @@ html, body {
   align-items: center;
   justify-content: center;
   background: url("./img/UKA 7_10_25-3.jpg") center/cover no-repeat;
-  animation: splash-fade 3s ease forwards;
+  animation: splash-hold 3s linear forwards; /* 线性淡出更明显 */
 }
+
+/* 欢迎文字：第 0~1s 淡入 */
 .splash-title {
   font-family: 'Parisienne', cursive;
   font-size: 1.8rem;
   color: #fff;
   padding: 10px 20px;
   border-radius: 14px;
-  background: var(--panel-bg);
+  background: rgba(40,40,40,0.5);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   opacity: 0;
   transform: translateY(30px);
   animation: title-rise 1.2s ease forwards;
+}
+
+/* 开场阶段隐藏（注意：我们会在 4s 时通过 JS 先移除 is-splashing，让后面内容参与交叉淡入） */
+body.is-splashing .main-header,
+body.is-splashing .sub-nav,
+body.is-splashing .page {
+  visibility: hidden;
 }
 
 /* ===== 顶部标题（固定） ===== */
@@ -44,7 +53,7 @@ html, body {
   right: 0;
   height: var(--header-h);
   background: #000;
-  z-index: 2000; /* 高于子导航与内容 */
+  z-index: 2000;
   display: flex;
   align-items: center;
 }
@@ -61,7 +70,7 @@ html, body {
   letter-spacing: 2px;
 }
 
-/* ===== 固定导航（固定在标题下方） ===== */
+/* ===== 固定导航 ===== */
 .sub-nav {
   position: fixed;
   top: calc(var(--header-h) + env(safe-area-inset-top));
@@ -91,11 +100,13 @@ html, body {
 .page {
   min-height: 100dvh;
   background: antiquewhite;
-  /* 顶部腾出空间：标题 + 导航 + 安全区 */
   padding-top: calc(var(--header-h) + var(--subnav-h) + env(safe-area-inset-top));
   opacity: 0;
-  animation: page-fade-in 420ms ease forwards;
-  animation-delay: 3s; /* 与 splash 时长对齐 */
+  animation: none; /* 先不触发，等 4s 露出时再启动动画 */
+}
+/* 4s 时 JS 去掉 is-splashing → 开始正文淡入，和 .splash 同时交叉 */
+body:not(.is-splashing) .page {
+  animation: page-fade-in 480ms ease forwards;
 }
 
 /* ===== 酒单分区 ===== */
@@ -104,8 +115,6 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-
-  /* 锚点滚动时，留出顶部固定区的高度，避免被遮住 */
   scroll-margin-top: calc(var(--header-h) + var(--subnav-h) + env(safe-area-inset-top) + 8px);
 }
 .section-title {
@@ -114,14 +123,15 @@ html, body {
   color: #222;
 }
 
-/* 示例卡片（可按需保留/修改） */
+/* 卡片 */
 .wine-card { background: transparent; border-radius: 14px; }
 .wine-image {
   width: 100%;
   aspect-ratio: 4/5;
-  object-fit: cover;
+  object-fit: contain; /* 确保完整展示 */
   display: block;
   border-radius: 14px;
+  background-color: antiquewhite;
 }
 .wine-info {
   margin-top: 8px;
@@ -135,21 +145,25 @@ html, body {
 .wine-name {
   margin: 0 0 6px;
   font-size: 1.1rem;
-  font-weight: 600;
-  font-family: 'Parisienne', cursive;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  letter-spacing: 0;
 }
 .wine-desc { margin: 0; font-size: 0.95rem; line-height: 1.6; }
 
 /* ===== 动画关键帧 ===== */
-@keyframes splash-fade {
+/* 0~4s 保持，4~5s 线性淡出（配合上方 linear） */
+@keyframes splash-hold {
   0%   { opacity: 1; visibility: visible; }
-  70%  { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; }
+  80%  { opacity: 1; visibility: visible; }  /* 0~4s 停留 */
+  100% { opacity: 0; visibility: hidden; }   /* 4~5s 淡出 */
 }
+/* 标题淡入 */
 @keyframes title-rise {
   0%   { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+/* 页面淡入 */
 @keyframes page-fade-in {
   0%   { opacity: 0; transform: translateY(6px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -168,46 +182,26 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   .splash, .splash * { animation: none !important; }
   .splash { display: none; }
+  body.is-splashing .main-header,
+  body.is-splashing .sub-nav,
+  body.is-splashing .page { visibility: visible; }
   .page { opacity: 1; }
 }
 
-
-
-
-/* 指定修改 */
-/* 手机屏幕 <=375px 微调 */
+/* 指定修改：小屏适配 */
 @media (max-width: 375px) {
   .splash {
-    background-size: contain;              /* 整张图完整显示 */
-    background-position: 40% 30%;    /* 位置微调 */
+    background-size: contain;
+    background-position: 40% 30%;
     background-repeat: no-repeat;
     background-color: #000;
   }
 }
-
-/* 手机屏幕 <=320px 微调 */
 @media (max-width: 320px) {
   .splash {
-    background-size: cover;     /* 确保填满整个屏幕 */
-    background-position: 50% 30%;   /* 位置微调 */
+    background-size: cover;
+    background-position: 50% 30%;
     background-repeat: no-repeat;
     background-color: #000;
   }
-}
-
-/* --- 让所有酒的图片完整显示，不裁切 --- */
-.wine-image {
-  /* 原文件里是 object-fit: cover; 这里改为 contain */
-  object-fit: contain;
-  /* 保持统一卡片比例的同时，完整显示图片；空余区域用纯色填充 */
-  aspect-ratio: 4 / 5;
-  width: 100%;
-  background-color: antiquewhite; /* 可换成你喜欢的底色 */
-}
-
-/* --- 酒名改为正常字体（非花体） --- */
-.wine-name {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-  font-weight: 700; /* 你也可以改成 600/500 */
-  letter-spacing: 0; /* 如需更紧凑可设为 0 或 -0.2px */
 }
